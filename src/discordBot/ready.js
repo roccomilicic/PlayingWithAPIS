@@ -10,4 +10,12 @@ const client = new Client({
     ]
 });
 
+client.on('ready', (c) => {
+    console.log(`Logged in as ${client.user.tag}!`);
+});
+
+client.on('channelCreate', (channel) => {
+    console.log(`Channel created: ${channel.name}`);
+});
+
 client.login(token);
