@@ -1,5 +1,7 @@
 const { Client, IntentsBitField, InteractionResponse } = require('discord.js');
 const { token } = require('./config.json');
+const { CommandHandler } = require('djs-commander');
+const path = require('path');
 
 const client = new Client({
     intents: [
@@ -11,15 +13,22 @@ const client = new Client({
     ]
 });
 
+new CommandHandler({
+    client,
+    commandsPath: path.join(__dirname, 'slashCommands'),
+    testServer: '1249645333722435674',
+    eventsPath: path.join(__dirname, 'events'),
+  });
+
 client.on('ready', (c) => {
     console.log(`Logged in as ${client.user.tag}!`);
 });
 
 client.on('messageCreate', (msg) => {
     // If the message is "ping"
-    if (msg.content === 'ping') {
+    if (msg.content === 'hey') {
         // Send "pong" to the same channel
-        msg.channel.send('pong');
+        msg.channel.send('hi');
     }
 });
 
@@ -30,5 +39,6 @@ client.on('channelCreate', (channel) => {
         channel.send('A new text channel has been created!');
     }
 });
+
 
 client.login(token);
