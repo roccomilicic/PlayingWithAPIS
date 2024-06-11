@@ -16,29 +16,23 @@ const client = new Client({
 new CommandHandler({
     client,
     commandsPath: path.join(__dirname, 'slashCommands'),
-    testServer: '1249645333722435674',
     eventsPath: path.join(__dirname, 'events'),
-  });
-
-client.on('ready', (c) => {
-    console.log(`Logged in as ${client.user.tag}!`);
+    testServer: '1249645333722435674',
 });
 
-client.on('messageCreate', (msg) => {
-    // If the message is "ping"
-    if (msg.content === 'hey') {
-        // Send "pong" to the same channel
+/*client.on('messageCreate', (msg) => {
+    if (msg.content === 'o') {
         msg.channel.send('hi');
     }
-});
+});*/
 
-client.on('channelCreate', (channel) => {
-    // Check if the created channel is a text channel
-    if (channel.type === 0) { // 0 represents GUILD_TEXT in the discord.js v13 and later
-        // Send a message to the newly created channel
-        channel.send('A new text channel has been created!');
-    }
-});
+// client.on('channelCreate', (channel) => {
+//     // Check if the created channel is a text channel
+//     if (channel.type === 0) { // 0 represents GUILD_TEXT in the discord.js v13 and later
+//         // Send a message to the newly created channel
+//         channel.send('A new text channel has been created!');
+//     }
+// });
 
 
 client.login(token);
