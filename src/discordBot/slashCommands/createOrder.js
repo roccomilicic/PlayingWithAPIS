@@ -18,11 +18,13 @@ module.exports = {
         modal.addComponents(firstActionRow);
         await interaction.showModal(modal);
 
+        // Filter for the modal submit event
         const filter = (interaction) => interaction.customId === `order-${interaction.user.id}`;
+
         interaction
             .awaitModalSubmit({ filter, time: 10_000 })
             .then((modalInteraction) => {
-                const restaurantName = modalInteraction.fields.getTextInputField('RestaurantInput');
+                const restaurantName = modalInteraction.fields.getTextInputValue('RestaurantInput');
                 modalInteraction.reply(`You have selected ${restaurantName} as your restaurant!`);
             })
             .catch((err) => {
