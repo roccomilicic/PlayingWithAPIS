@@ -1,8 +1,8 @@
 const axios = require('axios');
 
-function createDelivery(token, externalDeliveryId) {
+async function createDelivery(token, externalDeliveryId) {
     const body = JSON.stringify({
-        external_delivery_id: 'D-12312553',
+        external_delivery_id: 'D-12345123',  // Use the provided externalDeliveryId
         pickup_address: '901 Market Street 6th Floor San Francisco, CA 94103',
         pickup_business_name: 'Wells Fargo SF Downtown',
         pickup_phone_number: '+16505555555',
@@ -14,19 +14,17 @@ function createDelivery(token, externalDeliveryId) {
         order_value: 1999,
     });
 
-    axios
-        .post('https://openapi.doordash.com/drive/v2/deliveries', body, {
+    try {
+        const response = await axios.post('https://openapi.doordash.com/drive/v2/deliveries', body, {
             headers: {
                 Authorization: 'Bearer ' + token,
                 'Content-Type': 'application/json',
             },
-        })
-        .then(function (response) {
-            console.log(response.data);
-        })
-        .catch(function (error) {
-            console.log(error);
         });
+        return response;
+    } catch (error) {
+        throw new Error('Error creating delivery: ' + error.message);
+    }
 }
 
 module.exports = createDelivery;

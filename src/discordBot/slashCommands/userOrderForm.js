@@ -26,27 +26,25 @@ module.exports = {
     const filter = (interaction) => interaction.customId === `order-${interaction.user.id}`;
 
     // Await the modal submit
-    interaction
-      .awaitModalSubmit({ filter, time: 30_000 })
-      .then((modalInteraction) => {
-        const externalDeliveryIDText = modalInteraction.fields.getTextInputValue('externalDeliveryID');
+    try {
+      const modalInteraction = await interaction.awaitModalSubmit({ filter, time: 30_000 });
+      const externalDeliveryIDText = modalInteraction.fields.getTextInputValue('externalDeliveryID');
 
-        // Validate externalDeliveryID (optional)
+      // Validate externalDeliveryID (optional)
 
-        // Call the createDelivery function
-        createDelivery(token, externalDeliveryIDText)
-          .then((response) => {
-            console.log('Delivery created successfully:', response.data);
-            interaction.reply(`Your order with external ID ${externalDeliveryIDText} has been placed!`);
-          })
-          .catch((error) => {
-            console.error('Error creating delivery:', error);
-          });
-      })
-      .catch((err) => {
-        console.error('Error awaiting modal submit:', err);
-        // Log the error for debugging, but don't attempt to reply here
-      });
+      // Call the createDelivery function
+      try {
+        const response = await createDelivery(token, externalDeliveryIDText);
+        console.log('Delivery created successfully:', response.data);
+        await modalInteraction.reply(`Your order with external ID ${externalDeliveryIDText} has been placed!`);
+      } catch (error) {
+        console.error('Error creating delivery:', error);
+        await modalInteraction.reply('There was an error placing your order. Please try again later.');
+      }
+    } catch (err) {
+      console.error('Error awaiting modal submit:', err);
+      // Optionally reply to the interaction if you want to inform the user
+    }
   },
   data: {
     name: 'order',
