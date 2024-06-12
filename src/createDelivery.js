@@ -1,8 +1,8 @@
 const axios = require('axios');
 
-function createDelivery(token) {
+function createDelivery(token, externalDeliveryId) {
     const body = JSON.stringify({
-        external_delivery_id: 'D-12345888',
+        external_delivery_id: 'D-12312553',
         pickup_address: '901 Market Street 6th Floor San Francisco, CA 94103',
         pickup_business_name: 'Wells Fargo SF Downtown',
         pickup_phone_number: '+16505555555',

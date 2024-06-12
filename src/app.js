@@ -1,7 +1,6 @@
 const createWebToken = require('./createWebToken');
-const printWebToken = require('./createWebToken');
 const createDelivery = require('./createDelivery');
 
 const token = createWebToken();
-printWebToken(token);
+console.log("web token: ", token);
 createDelivery(token);

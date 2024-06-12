@@ -31,9 +31,4 @@ function createWebToken() {
     return token;
 }
 
-/* Print the JSON web token to the console. */
-function printWebToken(token) {
-    console.log(token);
-}
-
 module.exports = createWebToken;
