@@ -1,7 +1,6 @@
 const { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
-const createDelivery = require('../../createDelivery.js');
-const createWebToken = require('../../createWebToken');
-
+const createDelivery = require('../../doordash/createDelivery.js');
+const createWebToken = require('../../doordash/createWebToken.js');
 
 module.exports = {
   run: async ({ interaction }) => {
@@ -23,16 +22,12 @@ module.exports = {
     await interaction.showModal(modal);
 
     const token = createWebToken();
-    const filter = (interaction) => interaction.customId === `order-${interaction.user.id}`;
+    const filter = (i) => i.customId === `order-${interaction.user.id}`;
 
-    // Await the modal submit
     try {
       const modalInteraction = await interaction.awaitModalSubmit({ filter, time: 30_000 });
       const externalDeliveryIDText = modalInteraction.fields.getTextInputValue('externalDeliveryID');
 
-      // Validate externalDeliveryID (optional)
-
-      // Call the createDelivery function
       try {
         const response = await createDelivery(token, externalDeliveryIDText);
         console.log('Delivery created successfully:', response.data);
@@ -43,7 +38,6 @@ module.exports = {
       }
     } catch (err) {
       console.error('Error awaiting modal submit:', err);
-      // Optionally reply to the interaction if you want to inform the user
     }
   },
   data: {

@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@doordash/sdk": "^0.6.12",
     "djs-commander": "^0.0.50"
   }
 }
