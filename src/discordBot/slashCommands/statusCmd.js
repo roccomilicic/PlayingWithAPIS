@@ -1,8 +1,8 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const DoorDashClient = require('@doordash/sdk');
-const accessKey = require('../../doordash/accesskey.js');
+const getOrderStatus = require('../../doordash/getOrderStatus.js');
 
 module.exports = {
+    // Status command and the inputs
     data: new SlashCommandBuilder()
         .setName('status')
         .setDescription('Check the status of your DoorDash order!')
@@ -12,8 +12,9 @@ module.exports = {
                 .setRequired(true)
         ),
     run: async ({ interaction }) => {
-        const orderId = interaction.options.getString('orderid');
+        const orderId = interaction.options.getString('orderid'); // Get the order ID from the user's input
 
+        // Get the order status
         try {
             const response = await getOrderStatus(orderId);
             console.log('Order status retrieved successfully:', response.delivery_status);
@@ -25,15 +26,3 @@ module.exports = {
     }
 };
 
-async function getOrderStatus(orderId) {
-    const client = new DoorDashClient.DoorDashClient(accessKey);
-
-    try {
-        const response = await client.getDelivery(orderId);
-        console.log("RES", response.data);
-        return response.data;
-    } catch (error) {
-        console.log("ERR", error);
-        throw new Error('Error fetching order status: ' + error.message);
-    }
-}
