@@ -51,12 +51,11 @@ module.exports = {
       // Process the collected data
       try {
         const response = await createQuote(token, {
-          externalDeliveryId: `quote-${interaction.user.id}`,
-          pickupAddress: '901 Market Street 6th Floor San Francisco, CA 94103',
-          pickupPhoneNumber: phoneNumber,
-          dropoffAddress: `${address}, ${suburb}, ${city}, ${postcode}`,
-          dropoffPhoneNumber: phoneNumber,
-          orderValue: 1999,
+          externalDeliveryId: phoneNumber,
+          pickupAddress: '329 Albany Highway, Rosedale, Auckland, 0632, NZ',
+          //pickupPhoneNumber: phoneNumber,
+          dropoffAddress: `80 Laurel Oak Drive, Schnapper Rock, Auckland, 0632, NZ`,
+          dropoffPhoneNumber: phoneNumber,        
         });
         await modalInteraction.reply(`Quote created successfully with ID ${response.external_delivery_id}!`);
       } catch (error) {
