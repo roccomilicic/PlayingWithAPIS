@@ -1,48 +1,28 @@
-const { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
 const DoorDashClient = require('@doordash/sdk');
 const accessKey = require('../../doordash/accesskey.js');
 
 module.exports = {
+    data: new SlashCommandBuilder()
+        .setName('status')
+        .setDescription('Check the status of your DoorDash order!')
+        .addStringOption(option =>
+            option.setName('orderid')
+                .setDescription('The ID of your order')
+                .setRequired(true)
+        ),
     run: async ({ interaction }) => {
-        const modal = new ModalBuilder({
-            customId: `status-${interaction.user.id}`,
-            title: 'Check your order status!',
-        });
-
-        // Order ID input
-        const orderIdInput = new TextInputBuilder()
-            .setCustomId('orderId')
-            .setLabel('Order ID')
-            .setStyle(TextInputStyle.Short);
-
-        // Add input fields to the modal (form)
-        const firstActionRow = new ActionRowBuilder().addComponents(orderIdInput);
-        modal.addComponents(firstActionRow);
-
-        await interaction.showModal(modal);
-
-        const filter = (i) => i.customId === `status-${interaction.user.id}`;
+        const orderId = interaction.options.getString('orderid');
 
         try {
-            const modalInteraction = await interaction.awaitModalSubmit({ filter, time: 30_000 });
-            const orderIdText = modalInteraction.fields.getTextInputValue('orderId');
-
-            try {
-                const response = await getOrderStatus(orderIdText);
-                console.log('Order status retrieved successfully:', response.delivery_status);
-                await modalInteraction.reply(`Order status: ${response.delivery_status}`);
-            } catch (error) {
-                console.error('Error retrieving order status:', error);
-                await modalInteraction.reply('There was an error retrieving your order status. Please try again later.');
-            }
-        } catch (err) {
-            console.error('Error awaiting modal submit:', err);
+            const response = await getOrderStatus(orderId);
+            console.log('Order status retrieved successfully:', response.delivery_status);
+            await interaction.reply(`Order status: ${response.delivery_status}`);
+        } catch (error) {
+            console.error('Error retrieving order status:', error);
+            await interaction.reply('There was an error retrieving your order status. Please try again later.');
         }
-    },
-    data: {
-        name: 'status',
-        description: 'Check the status of your doordash order!',
-    },
+    }
 };
 
 async function getOrderStatus(orderId) {
