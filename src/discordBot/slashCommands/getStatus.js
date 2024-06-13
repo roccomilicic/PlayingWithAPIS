@@ -30,7 +30,7 @@ module.exports = {
             const orderIdText = modalInteraction.fields.getTextInputValue('orderId');
 
             try {
-                const response = await getOrderStatus(token, orderIdText);
+                const response = await getOrderStatus(orderIdText);
                 console.log('Order status retrieved successfully:', response.data);
                 await modalInteraction.reply(`The current status of your order with ID ${orderIdText} is: ${response.data.status}`);
             } catch (error) {
@@ -47,15 +47,15 @@ module.exports = {
     },
 };
 
-async function getOrderStatus(token, orderId) {
+async function getOrderStatus(orderId) {
     const client = new DoorDashClient.DoorDashClient(accessKey)
 
     const response = client
         .getDelivery(orderId)
         .then(response => {
-            console.log(response.data)
+            console.log("RES", response.data)
         })
         .catch(err => {
-            console.log(err)
+            console.log("ERR", err)
         })
 }

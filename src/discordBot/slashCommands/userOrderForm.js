@@ -30,8 +30,7 @@ module.exports = {
 
       try {
         const response = await createDelivery(token, externalDeliveryIDText);
-        console.log('Delivery created successfully:', response.data);
-        await modalInteraction.reply(`Your order with external ID ${externalDeliveryIDText} has been placed!`);
+        await modalInteraction.reply(`Your order with external ID ${response.external_delivery_id} has been placed!`);
       } catch (error) {
         console.error('Error creating delivery:', error);
         await modalInteraction.reply('There was an error placing your order. Please try again later.');

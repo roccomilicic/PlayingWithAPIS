@@ -13,7 +13,7 @@ async function createDelivery(externalDeliveryId) {
             dropoff_phone_number: '+16505555555',
             order_value: 1999,
         });
-        return response;
+        return response.data;
     } catch (error) {
         throw new Error('Error creating delivery: ' + error.message);
     }
