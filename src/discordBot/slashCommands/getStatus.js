@@ -1,6 +1,5 @@
 const { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
 const DoorDashClient = require('@doordash/sdk');
-const createWebToken = require('../../doordash/createWebToken.js');
 const accessKey = require('../../doordash/accesskey.js');
 
 module.exports = {
@@ -22,7 +21,6 @@ module.exports = {
 
         await interaction.showModal(modal);
 
-        const token = createWebToken();
         const filter = (i) => i.customId === `status-${interaction.user.id}`;
 
         try {
@@ -31,8 +29,8 @@ module.exports = {
 
             try {
                 const response = await getOrderStatus(orderIdText);
-                console.log('Order status retrieved successfully:', response.data);
-                await modalInteraction.reply(`The current status of your order with ID ${orderIdText} is: ${response.data.status}`);
+                console.log('Order status retrieved successfully:', response.delivery_status);
+                await modalInteraction.reply(`Order status: ${response.delivery_status}`);
             } catch (error) {
                 console.error('Error retrieving order status:', error);
                 await modalInteraction.reply('There was an error retrieving your order status. Please try again later.');
@@ -48,14 +46,14 @@ module.exports = {
 };
 
 async function getOrderStatus(orderId) {
-    const client = new DoorDashClient.DoorDashClient(accessKey)
+    const client = new DoorDashClient.DoorDashClient(accessKey);
 
-    const response = client
-        .getDelivery(orderId)
-        .then(response => {
-            console.log("RES", response.data)
-        })
-        .catch(err => {
-            console.log("ERR", err)
-        })
+    try {
+        const response = await client.getDelivery(orderId);
+        console.log("RES", response.data);
+        return response.data;
+    } catch (error) {
+        console.log("ERR", error);
+        throw new Error('Error fetching order status: ' + error.message);
+    }
 }
