@@ -13,6 +13,7 @@
     "@doordash/sdk": "^0.6.12",
     "axios": "^1.7.2",
     "cheerio": "^1.0.0-rc.12",
-    "djs-commander": "^0.0.50"
+    "djs-commander": "^0.0.50",
+    "puppeteer": "^22.11.0"
   }
 }
