@@ -52,9 +52,9 @@ module.exports = {
       try {
         const response = await createQuote(token, {
           externalDeliveryId: phoneNumber,
-          pickupAddress: '329 Albany Highway, Rosedale, Auckland, 0632, NZ',
+          pickupAddress: '329 Albany Highway, Rosedale, Auckland 0632, New Zealand',
           //pickupPhoneNumber: phoneNumber,
-          dropoffAddress: `80 Laurel Oak Drive, Schnapper Rock, Auckland, 0632, NZ`,
+          dropoffAddress: `${address}, ${suburb}, ${postcode}, ${city}`,
           dropoffPhoneNumber: phoneNumber,        
         });
         await modalInteraction.reply(`Quote created successfully with ID ${response.external_delivery_id}!`);

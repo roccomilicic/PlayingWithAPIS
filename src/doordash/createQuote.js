@@ -6,8 +6,8 @@ async function createQuote(token, { externalDeliveryId, pickupAddress, pickupPho
 
     const data = {
         external_delivery_id: externalDeliveryId,
-        pickup_address: '329 Albany Highway, Rosedale, Auckland 0632, New Zealand',
-        dropoff_address: '80 Laurel Oak Drive, Schnapper Rock, Auckland 0632, New Zealand',
+        pickup_address: pickupAddress,
+        dropoff_address: dropoffAddress,
         dropoff_phone_number: '+62288513174',
         //order_value: orderValue,
     };
