@@ -45,7 +45,7 @@ module.exports = {
             // Process the collected data//
             try {
                 const response = await acceptQuote(token, {
-                    externalDeliveryId: externalDeliveryId,
+                    externalDeliveryId: "1e859246-a108-443c-aa87-e6c3267bbc7e",
                 });
                 console.log("Response for acceptQuote:\n", response.data);
                 await modalInteraction.reply(`Quote accepted successfully with ID ${response.external_delivery_id}!`);
