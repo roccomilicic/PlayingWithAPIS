@@ -1,15 +1,15 @@
 const axios = require('axios');
 const accessKey = require('./accesskey.js');
+const { uuid } = require('uuidv4');
 
-async function createQuote(token, { externalDeliveryId, pickupAddress, pickupPhoneNumber, dropoffAddress, dropoffPhoneNumber, orderValue }) {
+async function createQuote(token, { pickupAddress, pickupPhoneNumber, dropoffAddress, dropoffPhoneNumber, orderValue }) {
     const url = 'https://openapi.doordash.com/drive/v2/quotes';
 
     const data = {
-        external_delivery_id: externalDeliveryId,
+        external_delivery_id: uuid(),
         pickup_address: pickupAddress,
         dropoff_address: dropoffAddress,
         dropoff_phone_number: '+62288513174',
-        //order_value: orderValue,
     };
 
     const headers = {

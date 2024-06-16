@@ -29,7 +29,7 @@ module.exports = {
       const externalDeliveryIDText = modalInteraction.fields.getTextInputValue('externalDeliveryID');
 
       try {
-        const response = await createDelivery(token, externalDeliveryIDText);
+        const response = await createDelivery(token);
         await modalInteraction.reply(`Your order with external ID ${response.external_delivery_id} has been placed!`);
       } catch (error) {
         console.error('Error creating delivery:', error);

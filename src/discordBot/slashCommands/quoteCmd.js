@@ -51,12 +51,12 @@ module.exports = {
       // Process the collected data
       try {
         const response = await createQuote(token, {
-          externalDeliveryId: phoneNumber,
           pickupAddress: '329 Albany Highway, Rosedale, Auckland 0632, New Zealand',
           //pickupPhoneNumber: phoneNumber,
           dropoffAddress: `${address}, ${suburb}, ${postcode}, ${city}`,
           dropoffPhoneNumber: phoneNumber,        
         });
+    
         await modalInteraction.reply(`Quote created successfully with ID ${response.external_delivery_id}!`);
       } catch (error) {
         console.error('Error creating quote:', error);

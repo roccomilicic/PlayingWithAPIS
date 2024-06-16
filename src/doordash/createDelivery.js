@@ -1,17 +1,17 @@
 const DoorDashClient = require('@doordash/sdk');
 const accessKey = require('./accesskey.js');
+const { uuid } = require('uuidv4');
 
-async function createDelivery(externalDeliveryId) {
+async function createDelivery() {
     const client = new DoorDashClient.DoorDashClient(accessKey);
     
     try {
         const response = await client.createDelivery({
-            external_delivery_id: externalDeliveryId,
-            pickup_address: '901 Market Street 6th Floor San Francisco, CA 94103',
-            pickup_phone_number: '+16505555555',
-            dropoff_address: '901 Market Street 6th Floor San Francisco, CA 94103',
-            dropoff_phone_number: '+16505555555',
-            order_value: 1999,
+            external_delivery_id: uuid(),
+            pickup_address: '329 Albany Highway, Rosedale, 0632 Auckland, New Zealand',
+            pickup_phone_number: '+642885133222',
+            dropoff_address: '80 Laurel Oak Drive, Schnapper Rock, 0632 Auckland, New Zealand',
+            dropoff_phone_number: '+642885131748',
         });
         return response.data;
     } catch (error) {
