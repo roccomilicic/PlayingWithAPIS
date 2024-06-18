@@ -13,6 +13,7 @@ async function createDelivery() {
             dropoff_address: '80 Laurel Oak Drive, Schnapper Rock, 0632 Auckland, New Zealand',
             dropoff_phone_number: '+642885131748',
         });
+        console.log("Response for createDelivery:", response.data);
         return response.data;
     } catch (error) {
         throw new Error('Error creating delivery: ' + error.message);

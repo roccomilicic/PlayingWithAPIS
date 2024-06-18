@@ -49,21 +49,21 @@ module.exports = {
       const postcode = modalInteraction.fields.getTextInputValue('postcode');
       const city = modalInteraction.fields.getTextInputValue('city');
 
-      // Process the collected data
-      try {
-        const response = await createQuote(token, {
+   
+      try { // Create a quote
+        const responseCreate = await createQuote(token, {
           pickupAddress: '329 Albany Highway, Rosedale, Auckland 0632, New Zealand',
           dropoffAddress: `${address}, ${suburb}, ${postcode}, ${city}`,
           dropoffPhoneNumber: phoneNumber,
         });
 
-        await modalInteraction.reply(`Quote created successfully with ID ${response.external_delivery_id}!`);
-        const externalDeliveryId = response.external_delivery_id;
+        // Log the response of createQuote
+        await modalInteraction.reply(`Quote created successfully with ID ${responseCreate.external_delivery_id}!`);
+        const externalDeliveryId = responseCreate.external_delivery_id;
 
-        try {
-          const response2 = await acceptQuote(externalDeliveryId);
-          console.log("CMD: Response for acceptQuote:\n", response2.data);
-          await modalInteraction.followUp(`Quote accepted successfully with ID ${response2.external_delivery_id}!`);
+        try { // Accept the quote
+          const responseAccept = await acceptQuote(externalDeliveryId);
+          await modalInteraction.followUp(`Quote accepted successfully with ID ${responseAccept.external_delivery_id}!`);
         } catch (error) {
           console.error('Error accepting quote:', error);
           await modalInteraction.followUp('There was an error accepting the quote. Please try again later.');

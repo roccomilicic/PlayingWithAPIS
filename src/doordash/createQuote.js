@@ -14,22 +14,14 @@ async function createQuote(token, { pickupAddress, pickupPhoneNumber, dropoffAdd
             dropoff_phone_number: '+642885131748',
         });
 
-        // const external_delivery_id = response.data.external_delivery_id;
-        // if (external_delivery_id) {
-        //     console.log("Quote created successfully with ID:", external_delivery_id);
-        //     await acceptQuote(external_delivery_id); // Ensure await is used
-        // } else {
-        //     throw new Error('Failed to retrieve external_delivery_id from response');
-        // }
-
-        console.log("Response for createQuote:", response.data);
+        console.log("CREATE: Response for createQuote:", response.data);
         return response.data;
     } catch (error) {
         if (error.response) {
-            console.error('!!!Error response data:', error.response.data);
-            throw new Error('!Error creating delivery: ' + JSON.stringify(error.response.data));
+            console.error('Error response data:', error.response.data);
+            throw new Error('Error creating delivery: ' + JSON.stringify(error.response.data));
         } else {
-            throw new Error('!!!Error creating delivery: ' + error.message);
+            throw new Error('Error creating delivery: ' + error.message);
         }
     }
 }
