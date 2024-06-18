@@ -1,4 +1,4 @@
-const { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
+const { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, EmbedBuilder } = require('discord.js');
 const createQuote = require('../../doordash/createQuote.js');
 const acceptQuote = require('../../doordash/acceptQuote.js');
 const createWebToken = require('../../doordash/createWebToken.js');
@@ -49,28 +49,45 @@ module.exports = {
       const postcode = modalInteraction.fields.getTextInputValue('postcode');
       const city = modalInteraction.fields.getTextInputValue('city');
 
-   
-      try { // Create a quote
+      // Create an initial embedded message
+      const embed = new EmbedBuilder()
+        .setColor('#0099ff')
+        .setTitle('Creating Quote')
+        .setDescription('Validating quote...')
+        .setTimestamp();
+
+      const message = await modalInteraction.reply({ embeds: [embed], fetchReply: true });
+
+      try {
+        // Create a quote
         const responseCreate = await createQuote(token, {
           pickupAddress: '329 Albany Highway, Rosedale, Auckland 0632, New Zealand',
           dropoffAddress: `${address}, ${suburb}, ${postcode}, ${city}`,
           dropoffPhoneNumber: phoneNumber,
         });
 
-        // Log the response of createQuote
-        await modalInteraction.reply(`Quote created successfully with ID ${responseCreate.external_delivery_id}!`);
+        // Update the embed with the created quote information
+        embed.setDescription(`Quote created successfully with ID ${responseCreate.external_delivery_id}!\nValidating acceptance...`);
+        await message.edit({ embeds: [embed] });
+
         const externalDeliveryId = responseCreate.external_delivery_id;
 
-        try { // Accept the quote
+        try {
+          // Accept the quote
           const responseAccept = await acceptQuote(externalDeliveryId);
-          await modalInteraction.followUp(`Quote accepted successfully with ID ${responseAccept.external_delivery_id}!`);
+          
+          // Update the embed with the accepted quote information
+          embed.setDescription(`Quote created successfully with ID ${responseCreate.external_delivery_id}!\nQuote accepted successfully with ID ${responseAccept.external_delivery_id}!`);
+          await message.edit({ embeds: [embed] });
         } catch (error) {
           console.error('Error accepting quote:', error);
-          await modalInteraction.followUp('There was an error accepting the quote. Please try again later.');
+          embed.setDescription('There was an error accepting the quote. Please try again later.');
+          await message.edit({ embeds: [embed] });
         }
       } catch (error) {
         console.error('Error creating quote:', error);
-        await modalInteraction.reply('There was an error creating the quote. Please try again later.');
+        embed.setDescription('There was an error creating the quote. Please try again later.');
+        await message.edit({ embeds: [embed] });
       }
     } catch (err) {
       console.error('Error awaiting modal submit:', err);
@@ -81,3 +98,4 @@ module.exports = {
     description: 'Create a quote!',
   },
 };
+M
