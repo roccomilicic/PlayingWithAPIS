@@ -13,7 +13,7 @@ async function createQuote(token, { pickupAddress, pickupPhoneNumber, dropoffAdd
             dropoff_address: dropoffAddress,
             dropoff_phone_number: '+62288513174',
         });
-        console.log("Response for acceptQuote:\n", response.message);
+        console.log("Response for createQuote:\n", response.message);
         return response.data;
     } catch (error) {
         throw new Error('\nError accepting delivery: ' + error.message);

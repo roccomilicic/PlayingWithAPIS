@@ -44,9 +44,7 @@ module.exports = {
             console.log("externalDeliveryId: ", externalDeliveryId);
             // Process the collected data//
             try {
-                const response = await acceptQuote(token, {
-                    externalDeliveryId: "1e859246-a108-443c-aa87-e6c3267bbc7e",
-                });
+                const response = await acceptQuote(externalDeliveryId);
                 console.log("Response for acceptQuote:\n", response.data);
                 await modalInteraction.reply(`Quote accepted successfully with ID ${response.external_delivery_id}!`);
             } catch (error) {
@@ -57,7 +55,7 @@ module.exports = {
             console.error('Error awaiting modal submit:', err);
         }
     },
-    data: {//
+    data: {
         name: 'accept',
         description: 'Accept a quote!',
     },

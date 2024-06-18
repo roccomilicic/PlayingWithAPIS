@@ -52,7 +52,6 @@ module.exports = {
       try {
         const response = await createQuote(token, {
           pickupAddress: '329 Albany Highway, Rosedale, Auckland 0632, New Zealand',
-          //pickupPhoneNumber: phoneNumber,
           dropoffAddress: `${address}, ${suburb}, ${postcode}, ${city}`,
           dropoffPhoneNumber: phoneNumber,        
         });

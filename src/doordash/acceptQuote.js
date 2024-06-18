@@ -6,8 +6,9 @@ async function acceptQuote(externalDeliveryId) {
     
     try {
         console.log("Accepting quote222...");
+        console.log("externalDeliveryId: ", externalDeliveryId);
         const response = await client.deliveryQuoteAccept(
-            "1e859246-a108-443c-aa87-e6c3267bbc7e"
+            externalDeliveryId
         );
         console.log("Response for acceptQuote:\n", response.message);
         return response.data;
