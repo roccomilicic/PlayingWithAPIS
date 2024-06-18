@@ -1,5 +1,6 @@
 const { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
 const createQuote = require('../../doordash/createQuote.js');
+const acceptQuote = require('../../doordash/acceptQuote.js');
 const createWebToken = require('../../doordash/createWebToken.js');
 
 function createTextInput(customId, label, style = TextInputStyle.Short) {
@@ -26,7 +27,7 @@ module.exports = {
     ];
 
     // Create ActionRows
-    const actionRows = inputs.map(input => 
+    const actionRows = inputs.map(input =>
       new ActionRowBuilder().addComponents(createTextInput(input.customId, input.label))
     );
 
@@ -40,7 +41,7 @@ module.exports = {
 
     try {
       const modalInteraction = await interaction.awaitModalSubmit({ filter, time: 30_000 });
-      
+
       // Collect values from the inputs
       const phoneNumber = modalInteraction.fields.getTextInputValue('phoneNumber');
       const address = modalInteraction.fields.getTextInputValue('address');
@@ -53,10 +54,20 @@ module.exports = {
         const response = await createQuote(token, {
           pickupAddress: '329 Albany Highway, Rosedale, Auckland 0632, New Zealand',
           dropoffAddress: `${address}, ${suburb}, ${postcode}, ${city}`,
-          dropoffPhoneNumber: phoneNumber,        
+          dropoffPhoneNumber: phoneNumber,
         });
-    
+
         await modalInteraction.reply(`Quote created successfully with ID ${response.external_delivery_id}!`);
+        const externalDeliveryId = response.external_delivery_id;
+
+        try {
+          const response2 = await acceptQuote(externalDeliveryId);
+          console.log("CMD: Response for acceptQuote:\n", response2.data);
+          await modalInteraction.followUp(`Quote accepted successfully with ID ${response2.external_delivery_id}!`);
+        } catch (error) {
+          console.error('Error accepting quote:', error);
+          await modalInteraction.followUp('There was an error accepting the quote. Please try again later.');
+        }
       } catch (error) {
         console.error('Error creating quote:', error);
         await modalInteraction.reply('There was an error creating the quote. Please try again later.');

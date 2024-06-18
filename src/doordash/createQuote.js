@@ -14,13 +14,13 @@ async function createQuote(token, { pickupAddress, pickupPhoneNumber, dropoffAdd
             dropoff_phone_number: '+642885131748',
         });
 
-        const external_delivery_id = response.data.external_delivery_id;
-        if (external_delivery_id) {
-            console.log("Quote created successfully with ID:", external_delivery_id);
-            await acceptQuote(external_delivery_id); // Ensure await is used
-        } else {
-            throw new Error('Failed to retrieve external_delivery_id from response');
-        }
+        // const external_delivery_id = response.data.external_delivery_id;
+        // if (external_delivery_id) {
+        //     console.log("Quote created successfully with ID:", external_delivery_id);
+        //     await acceptQuote(external_delivery_id); // Ensure await is used
+        // } else {
+        //     throw new Error('Failed to retrieve external_delivery_id from response');
+        // }
 
         console.log("Response for createQuote:", response.data);
         return response.data;
