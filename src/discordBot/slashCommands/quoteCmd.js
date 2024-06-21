@@ -10,6 +10,28 @@ function createTextInput(customId, label, style = TextInputStyle.Short) {
     .setStyle(style);
 }
 
+/* Gets the ETA in the format HH:MM */
+function getETA(s, start, end) {
+  const startIndex = s.indexOf(start);
+  const endIndex = s.indexOf(end, startIndex + 1);
+  
+  if (startIndex !== -1 && endIndex !== -1) {
+    const timeString = s.substring(startIndex + 1, endIndex);
+    const [hours, minutes] = timeString.split(':');
+    let hoursInt = parseInt(hours, 10);
+    
+    if (hoursInt > 12) {
+      hoursInt -= 12;
+    } else if (hoursInt === 0) {
+      hoursInt = 12;
+    }
+    
+    return `${hoursInt}:${minutes}`;
+  }
+  
+  return "";
+}
+
 module.exports = {
   run: async ({ interaction }) => {
     const modal = new ModalBuilder({
@@ -52,8 +74,7 @@ module.exports = {
       // Create an initial embedded message
       const embed = new EmbedBuilder()
         .setColor('#0099ff')
-        .setTitle('Creating Quote')
-        .setDescription('Validating quote...')
+        .setTitle('Creating Quote..')
         .setTimestamp();
 
       const message = await modalInteraction.reply({ embeds: [embed], fetchReply: true });
@@ -67,7 +88,8 @@ module.exports = {
         });
 
         // Update the embed with the created quote information
-        embed.setDescription(`Quote created successfully with ID ${responseCreate.external_delivery_id}!\nValidating acceptance...`);
+        embed
+          .setTitle('Quote Created...')
         await message.edit({ embeds: [embed] });
 
         const externalDeliveryId = responseCreate.external_delivery_id;
@@ -77,16 +99,36 @@ module.exports = {
           const responseAccept = await acceptQuote(externalDeliveryId);
           
           // Update the embed with the accepted quote information
-          embed.setDescription(`Quote created successfully with ID ${responseCreate.external_delivery_id}!\nQuote accepted successfully with ID ${responseAccept.external_delivery_id}!`);
+          embed
+            .setTitle('Quote Accepted!')
+            .addFields([
+              {
+                name: 'Order ID',
+                value: responseAccept.external_delivery_id,
+              },
+              {
+                name: 'Track your order',
+                value: responseAccept.tracking_url,
+              },
+              {
+                name: 'ETA',
+                value: getETA(responseAccept.dropoff_time_estimated, 'T', 'Z'),
+              }
+            ])
+            //.setDescription(`Order ID: ${responseAccept.external_delivery_id}\nTrack you order: ${responseAccept.tracking_url}`);
           await message.edit({ embeds: [embed] });
         } catch (error) {
           console.error('Error accepting quote:', error);
-          embed.setDescription('There was an error accepting the quote. Please try again later.');
+          embed
+            .setTitle('Error Accepting Quote')
+            .setDescription('There was an error accepting the quote. Please try again later.');
           await message.edit({ embeds: [embed] });
         }
       } catch (error) {
         console.error('Error creating quote:', error);
-        embed.setDescription('There was an error creating the quote. Please try again later.');
+        embed
+          .setTitle('Error Creating Quote')
+          .setDescription('There was an error creating the quote. Please try again later.');
         await message.edit({ embeds: [embed] });
       }
     } catch (err) {
@@ -98,4 +140,3 @@ module.exports = {
     description: 'Create a quote!',
   },
 };
-M
