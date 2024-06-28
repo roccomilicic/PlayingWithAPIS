@@ -74,7 +74,7 @@ module.exports = {
       // Create an initial embedded message
       const embed = new EmbedBuilder()
         .setColor('#0099ff')
-        .setTitle('Creating Quote..')
+        .setTitle('Creating Quote...')
         .setTimestamp();
 
       const message = await modalInteraction.reply({ embeds: [embed], fetchReply: true });
