@@ -5,13 +5,19 @@ const acceptQuote = require('./acceptQuote.js');
 
 async function createQuote(token, { pickupAddress, pickupPhoneNumber, dropoffAddress, dropoffPhoneNumber, orderValue }) {
     const client = new DoorDashClient.DoorDashClient(accessKey);
-    
+
     try {
         const response = await client.deliveryQuote({
             external_delivery_id: uuidv4(),
             pickup_address: pickupAddress,
             dropoff_address: dropoffAddress,
             dropoff_phone_number: '+642885131748',
+            "items": [
+                {
+                    "name": "Korean Fried Chicken Bites",
+                    "quantity": 2,
+                }
+            ]
         });
 
         console.log("CREATE: Response for createQuote:", response.data);
