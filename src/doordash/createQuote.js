@@ -14,7 +14,7 @@ async function createQuote(token, { pickupAddress, pickupPhoneNumber, dropoffAdd
             dropoff_phone_number: '+642885131748',
             "items": [
                 {
-                    "name": "Korean Fried Chicken Bites",
+                    "name": "Korean Chicken Bites",
                     "quantity": 2,
                 }
             ]

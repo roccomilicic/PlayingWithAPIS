@@ -106,6 +106,9 @@ module.exports = {
                 name: 'Order ID',
                 value: responseAccept.external_delivery_id,
               },
+              { name: 'Items',
+                value: responseAccept.items.map(item => `${item.quantity}x ${item.name}`).join('\n'),
+              },
               {
                 name: 'Track your order',
                 value: responseAccept.tracking_url,
